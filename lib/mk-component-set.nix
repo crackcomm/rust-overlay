@@ -1,7 +1,6 @@
 # Define component derivations and special treatments.
 { lib, stdenv, stdenvNoCC, gnutar, autoPatchelfHook, bintools, zlib, gccForLibs
 , apple-sdk ? null
-, pkgsHostHost
 # The path to nixpkgs root.
 , path
 , toRustTarget, removeNulls
@@ -153,9 +152,6 @@ let
             wrap "$dst" ${path + "/pkgs/build-support/bintools-wrapper/ld-wrapper.sh"} "$unwrapped"
           done
         fi
-      ''
-      + optionalString (stdenv.isLinux && pname == "cargo") ''
-        patchelf --add-needed ${pkgsHostHost.libsecret}/lib/libsecret-1.so.0 $out/bin/cargo
       '';
 
       env = lib.optionalAttrs (pname == "rustc") ({
